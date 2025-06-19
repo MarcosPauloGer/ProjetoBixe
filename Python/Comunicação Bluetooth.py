@@ -2,7 +2,7 @@ import serial            #biblioteca necessária para a comunicação via blueet
 import time              #biblioteca necessária para a gestão do tempo no python
 
 #determina a porta serial fictícia usada para a comunicação com o arduino
-serial_port = "COM5"
+serial_port = "COM9"
 #determina a frequência usada para a comuicação com o arduino 
 baud_rate = 9600
 
@@ -25,7 +25,7 @@ try:
             mensagem = 1
             arduino.write(mensagem.encode())
         else:
-            print('Reescreva o comando: ')
+            print('Comando incorreto')
         
         #fecha a comunicação momentaneamente, envia o dado e reinicia o ciclo
         arduino.close()
