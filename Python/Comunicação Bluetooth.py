@@ -24,8 +24,6 @@ try:
         elif entrada == 'esquerda':
             mensagem = 1
             arduino.write(mensagem.encode())
-        else:
-            print('Comando incorreto')
         
         #fecha a comunicação momentaneamente, envia o dado e reinicia o ciclo
         arduino.close()

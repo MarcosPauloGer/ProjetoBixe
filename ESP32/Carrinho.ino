@@ -62,8 +62,8 @@ void loop(){
 
 
 void calcula_distancia(){
-  distancia = ultrassom.Ranging(CM); //ultrassom.Ranging(CM) retorna a distancia em centímetros(CM)
-  delay(500); //Intervalo de meio segundo
+    distancia = ultrassom.Ranging(CM); //ultrassom.Ranging(CM) retorna a distancia em centímetros(CM)
+    delay(500); //Intervalo de meio segundo
 }
 
 
