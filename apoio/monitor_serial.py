@@ -1,19 +1,16 @@
 import serial
 
-port = 'COM15'
+SERIAL_PORT = 'COM15'
+BAUD_RATE = 9600
 
-ser = serial.Serial(port, 9600, timeout=1)
+while True:
+    try:
+        with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
+            print(f"### Conectado à porta serial {SERIAL_PORT}!")
+            while True:
+                linha = ser.readline().decode('utf-8').strip()
+                print(f"# {linha}")
 
-print(f"Lendo dados da porta {port}. Pressione Ctrl+C para sair.")
-
-try:
-    while True:
-        if ser.in_waiting > 0:
-            linha = ser.readline().decode('utf-8', errors='ignore').strip()
-            if linha:
-                print(f"Recebido: {linha}")
-except KeyboardInterrupt:
-    print("\nEncerrando leitura.")
-finally:
-    ser.close()
-
+    except serial.SerialException as e:
+        print(f"** Erro ao abrir a porta serial: {e}")
+        input("** Pressione Enter para tentar novamente...")
