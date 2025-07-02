@@ -1,11 +1,13 @@
-#include <Ultrasonic.h> //Inclui a biblioteca do ultrassônico
 #include "BluetoothSerial.h" //Inclui a biblioteca do bluetooth
-Ultrasonic ultrassom(5, 4); //Cria o objeto ultrassom, do tipo Ultrassonic, e define os pinos onde está ligado o TRIG(pino 5) e o ECHO(pino 4) respectivamente
 
-long distancia; //cria a variável distancia do tipo long
+const int trigPin = 9;
+const int echoPin = 10;
 
-BluetoothSerial SerialBT; //
+BluetoothSerial bt; //
 uint8_t counter = 0; //
+
+long duration;
+int distance;
 
 #define motor_A1 7 //Pino para a porta IN1 do motor 1
 #define motor_A2 8 //Pino para a porta IN2 do motor 1
@@ -14,32 +16,42 @@ uint8_t counter = 0; //
 
 
 void setup() {
-    Serial.begin(9600); //Inicializa a comunicação serial, com velocidade de comunicação de 9600
-    SerialBT.begin("Equipe 1"); //Nome do dispositivo Bluetooth
+    Serial.begin(9600);
+    bt.begin("Melhor Robô");
+    Serial.println("ready to pair"); //Nome do dispositivo Bluetooth
 
     pinMode(motor_A1, OUTPUT); //Define o pino 1 do motor 1 como output
     pinMode(motor_A2, OUTPUT); //Define o pino 2 do motor 1 como output
     pinMode(motor_B1, OUTPUT); //Define o pino 1 do motor 2 como output
     pinMode(motor_B2, OUTPUT); //Define o pino 2 do motor 2 como output
+
+    pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+    pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 }
 
 
 void loop(){
-    
-    //verifica a mensagem recebida pelo bluetooth enquanto houver loop
-    if (Serial.available()) {
-        SerialBT.write(Serial.read());
-    }
-    if (SerialBT.available()) {
-        Serial.write(SerialBT.read());
-    }
-    delay(500);
-    SerialBT.write(counter);
-    counter = counter > 254 ? 0 : counter+1;
+    if(bt.available()){
+        char str = bt.read();
+        Serial.println(str);
+        }
+    delay(20);
+
+    // Clears the trigPin
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    // Sets the trigPin on HIGH state for 10 micro seconds
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    // Reads the echoPin, returns the sound wave travel time in microseconds
+    duration = pulseIn(echoPin, HIGH);
+    // Calculating the distance
+    distance = duration * 0.034 / 2;
 
     //condição que verfica se a distancia do carrinho à parede é menor que 15 cm.
     //Se não for, anda em linha reta, se for, para o robô, espera o comando e gira para o lado apropriado
-    if (calcula_distancia() > 15){
+    if (distance > 15){
         digitalWrite(motor_A1, HIGH);
         digitalWrite(motor_A2, HIGH);
         digitalWrite(motor_B1, HIGH);
@@ -51,19 +63,13 @@ void loop(){
         digitalWrite(motor_B1, LOW);
         digitalWrite(motor_B2, LOW);
 
-        if (Serial.read() == 0){
-            gira_esquerda();
+        if (str == 0){
+            Serial.println("Direita");
         }
-        elif (Serial.read() == 1){
-            gira_direira();
+        else if (str == 1){
+            Serial.println("Esquerda");
         }
     }
-}
-
-
-void calcula_distancia(){
-    distancia = ultrassom.Ranging(CM); //ultrassom.Ranging(CM) retorna a distancia em centímetros(CM)
-    delay(500); //Intervalo de meio segundo
 }
 
 
