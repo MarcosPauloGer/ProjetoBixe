@@ -9,7 +9,8 @@ while True:
             print(f"### Conectado à porta serial {SERIAL_PORT}!")
             while True:
                 linha = ser.readline().decode('utf-8').strip()
-                print(f"# {linha}")
+                if linha:
+                    print(f"# {linha}")
 
     except serial.SerialException as e:
         print(f"** Erro ao abrir a porta serial: {e}")
