@@ -15,3 +15,7 @@ while True:
     except serial.SerialException as e:
         print(f"** Erro ao abrir a porta serial: {e}")
         input("** Pressione Enter para tentar novamente...")
+    
+    except KeyboardInterrupt:
+        print("### ENCERRANDO MONITOR.")
+        break
