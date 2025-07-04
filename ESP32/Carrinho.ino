@@ -1,7 +1,7 @@
 #include "BluetoothSerial.h" //Inclui a biblioteca do bluetooth
 
-const int trigPin = 9;
-const int echoPin = 10;
+const int trigPin = 5;
+const int echoPin = 6;
 
 BluetoothSerial bt; //
 uint8_t counter = 0; //
