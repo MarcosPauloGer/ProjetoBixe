@@ -18,7 +18,6 @@ int distance;
 void setup() {
     Serial.begin(9600);
     bt.begin("Melhor Robô");
-    Serial.println("ready to pair"); //Nome do dispositivo Bluetooth
 
     pinMode(motor_A1, OUTPUT); //Define o pino 1 do motor 1 como output
     pinMode(motor_A2, OUTPUT); //Define o pino 2 do motor 1 como output
@@ -31,11 +30,6 @@ void setup() {
 
 
 void loop(){
-    if(bt.available()){
-        char str = bt.read();
-        Serial.println(str);
-        }
-    delay(20);
 
     // Clears the trigPin
     digitalWrite(trigPin, LOW);
@@ -49,25 +43,24 @@ void loop(){
     // Calculating the distance
     distance = duration * 0.034 / 2;
 
-    //condição que verfica se a distancia do carrinho à parede é menor que 15 cm.
-    //Se não for, anda em linha reta, se for, para o robô, espera o comando e gira para o lado apropriado
-    if (distance > 15){
+    if (distance > 15) {
         digitalWrite(motor_A1, HIGH);
         digitalWrite(motor_A2, HIGH);
         digitalWrite(motor_B1, HIGH);
         digitalWrite(motor_B2, HIGH);
-    } 
-    else{
+    }
+    else {
         digitalWrite(motor_A1, LOW);
         digitalWrite(motor_A2, LOW);
         digitalWrite(motor_B1, LOW);
         digitalWrite(motor_B2, LOW);
-
+        char str = bt.read();
+        Serial.println(str);
         if (str == 0){
-            Serial.println("Direita");
+            gira_esquerda();
         }
         else if (str == 1){
-            Serial.println("Esquerda");
+            gira_direita();
         }
     }
 }
